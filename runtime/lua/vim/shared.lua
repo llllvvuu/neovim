@@ -396,6 +396,26 @@ function vim.tbl_deep_extend(behavior, ...)
   return tbl_extend(behavior, true, ...)
 end
 
+--- Visits children of a node recursively, applying the provided visitor function
+---@generic Node: table
+---@param node Node The root node to visit
+---@param key nil|string|fun(node: Node): Node[] How to find the children of a node. default: "children"
+---@param visitor fun(node: Node): boolean|nil Function to call at each node.
+---       If it returns true, it will skip recursing into the children of the node.
+function vim.traverse(node, key, visitor)
+  if not visitor(node) then
+    local children = node.children
+    if type(key) == 'function' then
+      children = key(node)
+    elseif key then
+      children = node[key]
+    end
+    for _, child in pairs(children or {}) do
+      vim.traverse(child, key, visitor)
+    end
+  end
+end
+
 --- Deep compare values for equality
 ---
 --- Tables are compared recursively unless they both provide the `eq` metamethod.

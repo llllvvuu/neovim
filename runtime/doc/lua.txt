@@ -2323,6 +2323,18 @@ vim.tbl_values({t})                                         *vim.tbl_values()*
     Return: ~
         (list) List of values
 
+vim.traverse({node}, {key}, {visitor})                        *vim.traverse()*
+    Visits children of a node recursively, applying the provided visitor
+    function
+
+    Parameters: ~
+      • {node}     (table) The root node to visit
+      • {key}      nil|string|fun(node: Node): Node[] How to find the children
+                   of a node. default: "children"
+      • {visitor}  fun(node: Node): boolean|nil Function to call at each node.
+                   If it returns true, it will skip recursing into the
+                   children of the node.
+
 vim.trim({s})                                                     *vim.trim()*
     Trim whitespace (Lua pattern "%s") from both sides of a string.
 
